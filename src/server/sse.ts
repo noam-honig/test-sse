@@ -31,7 +31,8 @@ sse.get("/api/stats", (req, res) => {
     res.json({
         active: connections.length,
         open,
-        close
+        close,
+        memory: process.memoryUsage().heapUsed / 1024 / 1024
     })
 });
 let counter = 0;
