@@ -6,17 +6,22 @@ import puppeteer from 'puppeteer';
 const app = express();
 app.use(api);
 app.use(sse);
-let i=0;
+let i = 0;
 app.get('/api/test', async (req, res) => {
-    for (let index = 0; index < 100; index++) {
+    let num = 10;
+    if (req.query?.items)
+        num = +req.query.items;
+    for (let index = 0; index < num; index++) {
         i++;
         const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        page.goto('https://mighty-tor-87921.herokuapp.com/', { waitUntil: 'networkidle2' });
+        for (let index = 0; index < 5; index++) {
+            const page = await browser.newPage();
+            page.goto('https://mighty-tor-87921.herokuapp.com/', { waitUntil: 'networkidle2' });
+        }
         console.log(i);
 
     }
-    res.send("started 300");
+    res.send("started " + i);
 });
 import path from 'path';
 app.use(express.static(path.join(__dirname, '../')));
